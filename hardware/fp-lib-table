@@ -1,0 +1,3 @@
+(fp_lib_table
+  (lib (name theta-remote-release)(type KiCad)(uri "$(KIPRJMOD)/theta-remote-release.pretty")(options "")(descr ""))
+)
