@@ -38,6 +38,7 @@ This project is released under the MIT license.
 
 ## Thanks
 
-This project uses the following open source softwares.
+This project uses the following resources.
 
 - [ArduinoJson](https://github.com/bblanchon/ArduinoJson) Copyright (c) 2014-2015 Benoit BLANCHON
+- [ゆるりとものづくり: ここであえてのESP-WROOM-02用変換基板](http://monomake.blogspot.jp/2015/08/esp-wroom-02.html)
