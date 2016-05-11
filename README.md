@@ -1,44 +1,73 @@
-# theta-remote-release
+# THETA簡単リモコン
 
-_This project is work-in-progress._
+5秒でRICOH THETA Sと接続できる簡単リモコンの設計を公開しています。
 
-A simple remote release device for THETA S.
-It takes only 3 secs to establish paring.
+[![](http://img.youtube.com/vi/02DGiVLA_kg/0.jpg)](https://www.youtube.com/watch?v=02DGiVLA_kg)
 
-[![](http://img.youtube.com/vi/hv6fxFxbwg8/0.jpg)](https://www.youtube.com/watch?v=hv6fxFxbwg8)
+## 機能
 
-## Schematics
+- THETA Sのシャッターを切る
+- Webブラウザで接続するTHETA Sを設定
+- Webブラウザでファームウェアをアップデート
+- USB充電
 
-WIP
+詳細は[操作説明](doc/instruction-manual.md)を御覧ください。
 
-## How to Build
-
-This project is using [PlatformIO](http://http://platformio.org/).
-
-1. Connect the ESP8266 to your PC via serial interface.
-2. Lanch the bootloader. (Keep IO0 low, and reaset the ESP8266.)
-3. Execute below commands.
+## プロジェクト構成
 
 ```
-# Install the platformio if you don't have it.
+/root
+  |-- hardware/       回路図・基板図 (KiCad)
+  |-- src/            ファームウェア (Arduino)
+  |-- platformio.ini  PlatformIOのプロジェクトファイル
+```
+
+## ハードウェア
+
+回路図、プリント基板は[KiCad](http://kicad-pcb.org/)で設計しました。
+
+`hardware/theta-remote-release.pro`をKiCadで開いてください。
+
+- [回路図](hardware/theta-remote-release.sch.svg)
+- [部品リスト](hardware/parts.md)
+
+## ファームウェア
+
+このプロジェクトはArduino ([PlatformIO](http://http://platformio.org/))を利用しています。
+
+次の手順でファームをビルドしてリモコンに書き込めます。
+
+1. PCのシリアルポートとリモコンのDEBUGコネクタを接続
+2. リモコンの電源ON
+3. 次のコマンドを実行
+
+```
+# もしPlatformIOがなければインストールする (Pythonが必要です)
 $ pip install -U pip setuptools     
 $ pip install -U platformio
 
-# Clone repository
+# このリポジトリをCloneする
 $ git clone https://github.com/shrhdk/theta-remote-release.git
 
-# Build & Upload
+# ビルドしてリモコン(ESP8266)にアップロードする
 $ cd theta-remote-release
 $ platformio run --target upload
 ```
+
+## 組み立て例
+
+[![組み立て済みの写真](doc/overview_thumb.jpg)](doc/overview.jpg)
+
+- [基板表面](doc/front.jpg)
+- [基板裏面](doc/back.jpg)
 
 ## License
 
 This project is released under the MIT license.
 
-## Thanks
+## 謝辞
 
-This project uses the following resources.
+このプロジェクトは以下のソフトウェア・資料を利用しています。
 
 - [ArduinoJson](https://github.com/bblanchon/ArduinoJson) Copyright (c) 2014-2015 Benoit BLANCHON
 - [ゆるりとものづくり: ここであえてのESP-WROOM-02用変換基板](http://monomake.blogspot.jp/2015/08/esp-wroom-02.html)
