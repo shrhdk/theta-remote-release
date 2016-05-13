@@ -16,7 +16,7 @@
 ## プロジェクト構成
 
 ```
-/root
+theta-remote-release/
   |-- hardware/       回路図・基板図 (KiCad)
   |-- src/            ファームウェア (Arduino)
   |-- platformio.ini  PlatformIOのプロジェクトファイル
