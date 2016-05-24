@@ -55,9 +55,8 @@ void takePicture() {
     led.off();
 
     ThetaS.takePicture();
-    startSession();
 
-    delay(1000);
+    delay(3000);
 
     led.on();
 }
@@ -83,7 +82,10 @@ void loop() {
     if(ThetaS.status() != WL_CONNECTED) {
         connect(Settings.ssid, Settings.password);
     } else if(needToUpdateSession) {
-        startSession();
+        ticker.detach();
+        needToUpdateSession = false;
+        ThetaS.updateSession();
+        ticker.attach(UPDATE_PERIOD, updateSessionFlag);
     } else if(button.isPressed()) {
         takePicture();
     }
