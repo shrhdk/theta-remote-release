@@ -13,6 +13,7 @@ public:
     void connect(const char *ssid, const char *password);
     wl_status_t status();
     int startSession();
+    int updateSession();
     int takePicture();
 private:
     static const char HOST[];

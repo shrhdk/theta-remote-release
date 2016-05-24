@@ -45,6 +45,34 @@ int ThetaSClass::startSession() {
     return 0;
 }
 
+int ThetaSClass::updateSession() {
+    Logger.debug("ThetaS::updateSession");
+
+    // Construct Request
+    StaticJsonBuffer<512> jsonBuffer;
+    JsonObject& request = jsonBuffer.createObject();
+    request["name"] = "camera.updateSession";
+    JsonObject& parameters = request.createNestedObject("parameters");
+    parameters["sessionId"] = sessionID;
+    request.printTo(buffer, sizeof(buffer));
+
+    // Send Request
+    if(post("/osc/commands/execute", buffer, buffer) != 0) {
+        return 1;
+    }
+
+    // Parse Response
+    JsonObject& response = jsonBuffer.parseObject(buffer);
+    if(!response.success()) {
+        Logger.error("Failed to parse response");
+        return 1;
+    }
+
+    strcpy(sessionID, response["results"]["sessionId"]);
+
+    return 0;
+}
+
 int ThetaSClass::takePicture() {
     Logger.debug("ThetaS::takePicture");
 
