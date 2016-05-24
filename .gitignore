@@ -15,6 +15,11 @@
 .dsn
 
 
+### GCC ###
+
+*.gch
+
+
 ### PlatformIO ###
 
 .pioenvs/
