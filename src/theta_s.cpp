@@ -8,6 +8,28 @@
 #include <ESP8266WiFi.h>
 #include <arduino.h>
 #include <stdint.h>
+#include <Ticker.h>
+
+// file scope
+
+Ticker ticker;
+
+const int UPDATE_SESSION_PERIOD = 160;
+
+bool needToUpdateSession = false;
+
+void updateSessionFlag() {
+    needToUpdateSession = true;
+}
+
+void enableUpdateSessionEvent() {
+    needToUpdateSession = false;
+    ticker.attach(UPDATE_SESSION_PERIOD, updateSessionFlag);
+}
+
+void disableUpdateSessionEvent() {
+    ticker.detach();
+}
 
 // public
 
@@ -21,6 +43,8 @@ wl_status_t ThetaSClass::status() {
 
 int ThetaSClass::startSession() {
     Logger.debug("ThetaS::startSession");
+
+    disableUpdateSessionEvent();
 
     // Construct Request
     StaticJsonBuffer<512> jsonBuffer;
@@ -42,11 +66,15 @@ int ThetaSClass::startSession() {
 
     strcpy(sessionID, response["results"]["sessionId"]);
 
+    enableUpdateSessionEvent();
+
     return 0;
 }
 
 int ThetaSClass::updateSession() {
     Logger.debug("ThetaS::updateSession");
+
+    disableUpdateSessionEvent();
 
     // Construct Request
     StaticJsonBuffer<512> jsonBuffer;
@@ -69,6 +97,8 @@ int ThetaSClass::updateSession() {
     }
 
     strcpy(sessionID, response["results"]["sessionId"]);
+
+    enableUpdateSessionEvent();
 
     return 0;
 }
@@ -95,6 +125,14 @@ int ThetaSClass::takePicture() {
     if(!response.success()) {
         Logger.error("Failed to parse response");
         return 1;
+    }
+
+    return 0;
+}
+
+int ThetaSClass::handle() {
+    if(needToUpdateSession) {
+        return ThetaS.updateSession();
     }
 
     return 0;

@@ -8,57 +8,19 @@
 #include "led.h"
 #include "settings.h"
 #include "theta_s.h"
-#include <Ticker.h>
 
 Button button(5);
 LED led(4);
 
 // THETA
 
-#define UPDATE_PERIOD (160)
-
-Ticker ticker;
-bool needToUpdateSession = false;
-
-void updateSessionFlag() {
-    needToUpdateSession = true;
-}
-
 void connect(const char *ssid, const char *password) {
-    led.off();
-
     ThetaS.connect(ssid, password);
     while(ThetaS.status() != WL_CONNECTED) {
         delay(300);
         led.toggle();
         Logger.debug(".");
     }
-
-    startSession();
-
-    led.on();
-}
-
-void startSession() {
-    led.off();
-
-    ThetaS.startSession();
-
-    ticker.detach();
-    needToUpdateSession = false;
-    ticker.attach(UPDATE_PERIOD, updateSessionFlag);
-
-    led.on();
-}
-
-void takePicture() {
-    led.off();
-
-    ThetaS.takePicture();
-
-    delay(3000);
-
-    led.on();
 }
 
 // Entry Point
@@ -80,13 +42,16 @@ void setup() {
 
 void loop() {
     if(ThetaS.status() != WL_CONNECTED) {
+        led.off();
         connect(Settings.ssid, Settings.password);
-    } else if(needToUpdateSession) {
-        ticker.detach();
-        needToUpdateSession = false;
-        ThetaS.updateSession();
-        ticker.attach(UPDATE_PERIOD, updateSessionFlag);
+        ThetaS.startSession();
+        led.on();
     } else if(button.isPressed()) {
-        takePicture();
+        led.off();
+        ThetaS.takePicture();
+        delay(3000);
+        led.on();
     }
+
+    ThetaS.handle();
 }

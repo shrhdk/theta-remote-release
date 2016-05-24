@@ -15,6 +15,7 @@ public:
     int startSession();
     int updateSession();
     int takePicture();
+    int handle();
 private:
     static const char HOST[];
     static const int PORT;
