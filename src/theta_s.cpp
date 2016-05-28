@@ -6,6 +6,7 @@
 #include "logger.h"
 #include <strings.h>
 #include <ESP8266WiFi.h>
+#include <ESP8266HTTPClient.h>
 #include <arduino.h>
 #include <stdint.h>
 #include <Ticker.h>
@@ -147,62 +148,15 @@ const int ThetaSClass::PORT = 80;
 int ThetaSClass::post(const char *path, const char *body, char *response) {
     Logger.debug("ThetaS::post");
 
-    WiFiClient wifiClient;
-
-    // Connect
-    WiFiClient client;
-    if (!client.connect(HOST, PORT)) {
-        Logger.debug("connection failed");
-        return 1;
-    }
-
-    // Construct Request
-
-    String request;
-    request += String("POST ") + path + " HTTP/1.1\r\n";
-    request += String("Host: ") + HOST + ":" + PORT + "\r\n";
-    request += "Content-Type: application/json;charset=utf-8\r\n";
-    request += "Accept: application/json\r\n";
-    request += String("Content-Length:") + strlen(body) + "\r\n";
-    request += "\r\n";
-    request += body;
-
-    // Send Request
-
-    Logger.debug("---- Request ----");
-
-    Logger.debug(request.c_str());
-    Logger.debug("");
-
-    client.print(request);
-
-    // Receive Response
-
-    Logger.debug("---- Response ----");
-
-    // Skip Header
-    while(client.connected() || client.available()){
-        String line = client.readStringUntil('\r');
-        Logger.debug(line.c_str());
-        if(line.equals("\n")) {
-            Logger.debug("");
-            break;
-        }
-    }
-
-    // Read Body
-    String responseString;
-    while(client.available()) {
-        responseString += client.readStringUntil('\r');
-    }
-
-    Logger.debug(responseString.c_str());
-
-    strcpy(response, responseString.c_str());
-
-    wifiClient.stop();
-
-    return 0;
+    HTTPClient http;
+    http.begin(HOST, PORT, path);
+    http.addHeader("Content-Type", "application/json;charset=utf-8");
+    http.addHeader("Accept", "application/json");
+    int statusCode = http.POST((uint8_t *)body, strlen(body));
+    String result = http.getString();
+    http.end();
+    strcpy(response, result.c_str());
+    return statusCode == 200 ? 0 : 1;
 }
 
 ThetaSClass ThetaS;
