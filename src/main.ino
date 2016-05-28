@@ -48,8 +48,7 @@ void loop() {
         led.on();
     } else if(button.isPressed()) {
         led.off();
-        ThetaS.takePicture();
-        delay(3000);
+        ThetaS.shoot();
         led.on();
     }
 

@@ -12,15 +12,22 @@ class ThetaSClass {
 public:
     void connect(const char *ssid, const char *password);
     wl_status_t status();
+    int getCaptureStatus();
     int startSession();
     int updateSession();
+    int getCaptureMode();
+    int startCapture();
+    int stopCapture();
     int takePicture();
+    int shoot();
     int handle();
 private:
     static const char HOST[];
     static const int PORT;
     char buffer[512];
-    char sessionID[16];
+    char captureStatus[64];
+    char sessionID[64];
+    char captureMode[64];
     int post(const char *path, const char *body, char *response);
 };
 
