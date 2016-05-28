@@ -54,7 +54,7 @@ int ThetaSClass::getCaptureStatus() {
     }
 
     // Parse Response
-    StaticJsonBuffer<512> jsonBuffer;
+    jsonBuffer = StaticJsonBuffer<512>();
     JsonObject& response = jsonBuffer.parseObject(buffer);
     if(!response.success()) {
         Logger.error("Failed to parse response");
@@ -72,7 +72,7 @@ int ThetaSClass::startSession() {
     disableUpdateSessionEvent();
 
     // Construct Request
-    StaticJsonBuffer<512> jsonBuffer;
+    jsonBuffer = StaticJsonBuffer<512>();
     JsonObject& request = jsonBuffer.createObject();
     request["name"] = "camera.startSession";
     request.printTo(buffer, sizeof(buffer));
@@ -83,6 +83,7 @@ int ThetaSClass::startSession() {
     }
 
     // Parse Response
+    jsonBuffer = StaticJsonBuffer<512>();
     JsonObject& response = jsonBuffer.parseObject(buffer);
     if(!response.success()) {
         Logger.error("Failed to parse response");
@@ -102,7 +103,7 @@ int ThetaSClass::updateSession() {
     disableUpdateSessionEvent();
 
     // Construct Request
-    StaticJsonBuffer<512> jsonBuffer;
+    jsonBuffer = StaticJsonBuffer<512>();
     JsonObject& request = jsonBuffer.createObject();
     request["name"] = "camera.updateSession";
     JsonObject& parameters = request.createNestedObject("parameters");
@@ -115,6 +116,7 @@ int ThetaSClass::updateSession() {
     }
 
     // Parse Response
+    jsonBuffer = StaticJsonBuffer<512>();
     JsonObject& response = jsonBuffer.parseObject(buffer);
     if(!response.success()) {
         Logger.error("Failed to parse response");
@@ -132,7 +134,7 @@ int ThetaSClass::getCaptureMode() {
     Logger.debug("ThetaS::getCaptureMode");
 
     // Construct Request
-    StaticJsonBuffer<512> jsonBuffer;
+    jsonBuffer = StaticJsonBuffer<512>();
     JsonObject& request = jsonBuffer.createObject();
     request["name"] = "camera.getOptions";
     JsonObject& parameters = request.createNestedObject("parameters");
@@ -149,6 +151,7 @@ int ThetaSClass::getCaptureMode() {
     }
 
     // Parse Response
+    jsonBuffer = StaticJsonBuffer<512>();
     JsonObject& response = jsonBuffer.parseObject(buffer);
     if(!response.success()) {
         Logger.error("Failed to parse response");
@@ -164,7 +167,7 @@ int ThetaSClass::takePicture() {
     Logger.debug("ThetaS::takePicture");
 
     // Construct Request
-    StaticJsonBuffer<512> jsonBuffer;
+    jsonBuffer = StaticJsonBuffer<512>();
     JsonObject& request = jsonBuffer.createObject();
     request["name"] = "camera.takePicture";
     JsonObject& parameters = request.createNestedObject("parameters");
@@ -177,6 +180,7 @@ int ThetaSClass::takePicture() {
     }
 
     // Parse Response
+    jsonBuffer = StaticJsonBuffer<512>();
     JsonObject& response = jsonBuffer.parseObject(buffer);
 
     if(!response.success()) {
@@ -191,7 +195,7 @@ int ThetaSClass::startCapture() {
     Logger.debug("ThetaS::startCapture");
 
     // Construct Request
-    StaticJsonBuffer<512> jsonBuffer;
+    jsonBuffer = StaticJsonBuffer<512>();
     JsonObject& request = jsonBuffer.createObject();
     request["name"] = "camera._startCapture";
     JsonObject& parameters = request.createNestedObject("parameters");
@@ -204,6 +208,7 @@ int ThetaSClass::startCapture() {
     }
 
     // Parse Response
+    jsonBuffer = StaticJsonBuffer<512>();
     JsonObject& response = jsonBuffer.parseObject(buffer);
 
     if(!response.success()) {
@@ -218,7 +223,7 @@ int ThetaSClass::stopCapture() {
     Logger.debug("ThetaS::stopCapture");
 
     // Construct Request
-    StaticJsonBuffer<512> jsonBuffer;
+    jsonBuffer = StaticJsonBuffer<512>();
     JsonObject& request = jsonBuffer.createObject();
     request["name"] = "camera._stopCapture";
     JsonObject& parameters = request.createNestedObject("parameters");
@@ -231,6 +236,7 @@ int ThetaSClass::stopCapture() {
     }
 
     // Parse Response
+    jsonBuffer = StaticJsonBuffer<512>();
     JsonObject& response = jsonBuffer.parseObject(buffer);
 
     if(!response.success()) {

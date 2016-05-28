@@ -25,6 +25,7 @@ private:
     static const char HOST[];
     static const int PORT;
     char buffer[512];
+    StaticJsonBuffer<512> jsonBuffer;
     char captureStatus[64];
     char sessionID[64];
     char captureMode[64];
