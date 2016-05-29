@@ -63,11 +63,12 @@ $ platformio run --target upload
 
 ## License
 
-This project is released under the MIT license.
+- This project is released under the MIT license. (except `ESP8266HTTPClient.cpp`)
+- [ESP8266HTTPClient.cpp](src/ESP8266HTTPClient.cpp) is released under the LGPL. (the original is [here](https://github.com/esp8266/Arduino/blob/2.2.0/libraries/ESP8266HTTPClient/src/ESP8266HTTPClient.cpp))
 
 ## 謝辞
 
 このプロジェクトは以下のソフトウェア・資料を利用しています。
 
-- [ArduinoJson](https://github.com/bblanchon/ArduinoJson) Copyright (c) 2014-2015 Benoit BLANCHON
+- [aJson](https://github.com/interactive-matter/aJson) Copyright (c) 2010, Interactive Matter, Marcus Nowotny
 - [ゆるりとものづくり: ここであえてのESP-WROOM-02用変換基板](http://monomake.blogspot.jp/2015/08/esp-wroom-02.html)
