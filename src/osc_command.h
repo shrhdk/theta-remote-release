@@ -27,6 +27,9 @@ public:
     bool getResultBool(const char *name);
     int getResultNumber(const char *name);
     float getResultFloat(const char *name);
+    // Error
+    char *code;
+    char *message;
 private:
     // Request
     aJsonObject *request = NULL;
@@ -34,9 +37,6 @@ private:
     // Response
     aJsonObject *response = NULL;
     aJsonObject *results = NULL;
-    // Error
-    char *code;
-    char *message;
 };
 
 #endif
