@@ -49,9 +49,7 @@ int ThetaSClass::getCaptureStatus() {
     strcpy(buffer, "");
 
     // Send Request
-    if(post("/osc/state", buffer, buffer) != 0) {
-        return 1;
-    }
+    post("/osc/state", buffer, buffer);
 
     // Parse Response
     jsonBuffer = StaticJsonBuffer<512>();
@@ -71,26 +69,15 @@ int ThetaSClass::startSession() {
 
     disableUpdateSessionEvent();
 
-    // Construct Request
-    jsonBuffer = StaticJsonBuffer<512>();
-    JsonObject& request = jsonBuffer.createObject();
-    request["name"] = "camera.startSession";
-    request.printTo(buffer, sizeof(buffer));
+    OSCCommand cmd("camera.startSession");
 
-    // Send Request
-    if(post("/osc/commands/execute", buffer, buffer) != 0) {
+    cmd.execute();
+
+    if(cmd.statusCode != 200) {
         return 1;
     }
 
-    // Parse Response
-    jsonBuffer = StaticJsonBuffer<512>();
-    JsonObject& response = jsonBuffer.parseObject(buffer);
-    if(!response.success()) {
-        Logger.error("Failed to parse response");
-        return 1;
-    }
-
-    strcpy(sessionID, response["results"]["sessionId"]);
+    strcpy(sessionID, cmd.getResultString("sessionId"));
 
     enableUpdateSessionEvent();
 
@@ -103,27 +90,16 @@ int ThetaSClass::updateSession() {
     disableUpdateSessionEvent();
 
     // Construct Request
-    jsonBuffer = StaticJsonBuffer<512>();
-    JsonObject& request = jsonBuffer.createObject();
-    request["name"] = "camera.updateSession";
-    JsonObject& parameters = request.createNestedObject("parameters");
-    parameters["sessionId"] = sessionID;
-    request.printTo(buffer, sizeof(buffer));
+    OSCCommand cmd("camera.updateSession");
+    cmd.addParameter("sessionId", sessionID);
 
-    // Send Request
-    if(post("/osc/commands/execute", buffer, buffer) != 0) {
+    cmd.execute();
+
+    if(cmd.statusCode != 200) {
         return 1;
     }
 
-    // Parse Response
-    jsonBuffer = StaticJsonBuffer<512>();
-    JsonObject& response = jsonBuffer.parseObject(buffer);
-    if(!response.success()) {
-        Logger.error("Failed to parse response");
-        return 1;
-    }
-
-    strcpy(sessionID, response["results"]["sessionId"]);
+    strcpy(sessionID, cmd.getResultString("sessionId"));
 
     enableUpdateSessionEvent();
 
@@ -133,32 +109,20 @@ int ThetaSClass::updateSession() {
 int ThetaSClass::getCaptureMode() {
     Logger.debug("ThetaS::getCaptureMode");
 
-    // Construct Request
-    jsonBuffer = StaticJsonBuffer<512>();
-    JsonObject& request = jsonBuffer.createObject();
-    request["name"] = "camera.getOptions";
-    JsonObject& parameters = request.createNestedObject("parameters");
-    parameters["sessionId"] = sessionID;
-    JsonArray& optionNames = parameters.createNestedArray("optionNames");
-    optionNames.add("captureMode");
-    request.printTo(buffer, sizeof(buffer));
+    OSCCommand cmd("camera.getOptions");
+    cmd.addParameter("sessionId", sessionID);
+    aJsonObject *optionNames = aJson.createArray();
+    aJson.addItemToArray(optionNames, aJson.createItem("captureMode"));
+    cmd.addParameter("optionNames", optionNames);
 
-    Logger.debug(buffer);
-    // Send Request
-    if(post("/osc/commands/execute", buffer, buffer) != 0) {
-        Logger.error("Failed to send request");
+    cmd.execute();
+
+    if(cmd.statusCode != 200) {
         return 1;
     }
 
-    // Parse Response
-    jsonBuffer = StaticJsonBuffer<512>();
-    JsonObject& response = jsonBuffer.parseObject(buffer);
-    if(!response.success()) {
-        Logger.error("Failed to parse response");
-        return 1;
-    }
-
-    strcpy(captureMode, response["results"]["options"]["captureMode"]);
+    aJsonObject *options = cmd.getResultArray("options");
+    strcpy(captureMode, aJson.getObjectItem(options, "captureMode")->valuestring);
 
     return 0;
 }
@@ -166,25 +130,12 @@ int ThetaSClass::getCaptureMode() {
 int ThetaSClass::takePicture() {
     Logger.debug("ThetaS::takePicture");
 
-    // Construct Request
-    jsonBuffer = StaticJsonBuffer<512>();
-    JsonObject& request = jsonBuffer.createObject();
-    request["name"] = "camera.takePicture";
-    JsonObject& parameters = request.createNestedObject("parameters");
-    parameters["sessionId"] = sessionID;
-    request.printTo(buffer, sizeof(buffer));
+    OSCCommand cmd("camera.takePicture");
+    cmd.addParameter("sessionId", sessionID);
 
-    // Send Request
-    if(post("/osc/commands/execute", buffer, buffer) != 0) {
-        return 1;
-    }
+    cmd.execute();
 
-    // Parse Response
-    jsonBuffer = StaticJsonBuffer<512>();
-    JsonObject& response = jsonBuffer.parseObject(buffer);
-
-    if(!response.success()) {
-        Logger.error("Failed to parse response");
+    if(cmd.statusCode != 200) {
         return 1;
     }
 
@@ -194,25 +145,12 @@ int ThetaSClass::takePicture() {
 int ThetaSClass::startCapture() {
     Logger.debug("ThetaS::startCapture");
 
-    // Construct Request
-    jsonBuffer = StaticJsonBuffer<512>();
-    JsonObject& request = jsonBuffer.createObject();
-    request["name"] = "camera._startCapture";
-    JsonObject& parameters = request.createNestedObject("parameters");
-    parameters["sessionId"] = sessionID;
-    request.printTo(buffer, sizeof(buffer));
+    OSCCommand cmd("camera._startCapture");
+    cmd.addParameter("sessionId", sessionID);
 
-    // Send Request
-    if(post("/osc/commands/execute", buffer, buffer) != 0) {
-        return 1;
-    }
+    cmd.execute();
 
-    // Parse Response
-    jsonBuffer = StaticJsonBuffer<512>();
-    JsonObject& response = jsonBuffer.parseObject(buffer);
-
-    if(!response.success()) {
-        Logger.error("Failed to parse response");
+    if(cmd.statusCode != 200) {
         return 1;
     }
 
@@ -222,25 +160,12 @@ int ThetaSClass::startCapture() {
 int ThetaSClass::stopCapture() {
     Logger.debug("ThetaS::stopCapture");
 
-    // Construct Request
-    jsonBuffer = StaticJsonBuffer<512>();
-    JsonObject& request = jsonBuffer.createObject();
-    request["name"] = "camera._stopCapture";
-    JsonObject& parameters = request.createNestedObject("parameters");
-    parameters["sessionId"] = sessionID;
-    request.printTo(buffer, sizeof(buffer));
+    OSCCommand cmd("camera._stopCapture");
+    cmd.addParameter("sessionId", sessionID);
 
-    // Send Request
-    if(post("/osc/commands/execute", buffer, buffer) != 0) {
-        return 1;
-    }
+    cmd.execute();
 
-    // Parse Response
-    jsonBuffer = StaticJsonBuffer<512>();
-    JsonObject& response = jsonBuffer.parseObject(buffer);
-
-    if(!response.success()) {
-        Logger.error("Failed to parse response");
+    if(cmd.statusCode != 200) {
         return 1;
     }
 
@@ -291,24 +216,18 @@ const char ThetaSClass::HOST[] = "192.168.1.1";
 
 const int ThetaSClass::PORT = 80;
 
-int ThetaSClass::post(const char *path, const char *body, char *response) {
+void ThetaSClass::post(const char *path, const char *body, char *response) {
     Logger.debug("ThetaS::post");
 
     HTTPClient http;
+    http.setReuse(true);
     http.begin(HOST, PORT, path);
     http.addHeader("Content-Type", "application/json;charset=utf-8");
     http.addHeader("Accept", "application/json");
-    int statusCode = http.POST((uint8_t *)body, strlen(body));
+    statusCode = http.POST((uint8_t *)body, strlen(body));
     String result = http.getString();
     http.end();
     strcpy(response, result.c_str());
-
-    if(statusCode != 200) {
-        Logger.debug((String("Receive error response: ") + statusCode + " " + result).c_str());
-        return 1;
-    }
-
-    return 0;
 }
 
 ThetaSClass ThetaS;
