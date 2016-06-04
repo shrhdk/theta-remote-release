@@ -9,25 +9,25 @@
 
 LED::LED(int port) : port(port) {
     pinMode(port, OUTPUT);
-    this->off();
+    off();
 }
 
 void LED::on() {
-    this->set(true);
+    set(true);
 }
 
 void LED::off() {
-    this->set(false);
+    set(false);
 }
 
 void LED::toggle() {
-    this->set(!this->get());
+    set(!get());
 }
 
 // private
 
 bool LED::get() {
-    return this->onOff;
+    return onOff;
 }
 
 void LED::set(bool onOff) {

@@ -10,5 +10,5 @@ Button::Button(int port) : port(port) {
 }
 
 bool Button::isPressed() {
-    return digitalRead(this->port) == LOW;
+    return digitalRead(port) == LOW;
 }

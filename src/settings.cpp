@@ -9,28 +9,28 @@
 // public
 
 void SettingsClass::load() {
-    this->pos = 0;
+    pos = 0;
 
     EEPROM.begin(128);
-    if(this->verify() != 0) {
+    if(verify() != 0) {
         Logger.debug("No saved data.");
-        strcpy(this->ssid, "");
-        strcpy(this->password, "");
+        strcpy(ssid, "");
+        strcpy(password, "");
     } else {
         Logger.debug("Loading saved data.");
-        this->read(this->ssid);
-        this->read(this->password);
+        read(ssid);
+        read(password);
     }
     EEPROM.end();
 }
 
 void SettingsClass::flush() {
-    this->pos = 0;
+    pos = 0;
 
     EEPROM.begin(128);
-    this->write(HEADER);
-    this->write(this->ssid);
-    this->write(this->password);
+    write(HEADER);
+    write(ssid);
+    write(password);
     EEPROM.end();
 }
 
@@ -40,7 +40,7 @@ const char SettingsClass::HEADER[] = "THETA";
 
 int SettingsClass::verify() {
     for(int i = 0; i < strlen(HEADER) + 1; i++) {
-        char c = this->read();
+        char c = read();
         if(HEADER[i] != c) {
             return 1;
         }
@@ -50,16 +50,16 @@ int SettingsClass::verify() {
 }
 
 char SettingsClass::read() {
-    return EEPROM.read(this->pos++);
+    return EEPROM.read(pos++);
 }
 
 void SettingsClass::write(char c) {
-    EEPROM.write(this->pos++, c);
+    EEPROM.write(pos++, c);
 }
 
 void SettingsClass::read(char *dst) {
     for(int i = 0; ; i++) {
-        dst[i] = this->read();
+        dst[i] = read();
 
         if(dst[i] == '\0') {
             return;
@@ -69,7 +69,7 @@ void SettingsClass::read(char *dst) {
 
 void SettingsClass::write(const char *src) {
     for(int i = 0; ; i++) {
-        this->write(src[i]);
+        write(src[i]);
 
         if(src[i] == '\0') {
             return;
