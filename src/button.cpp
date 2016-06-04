@@ -5,10 +5,6 @@
 #include "button.h"
 #include "arduino.h"
 
-Button::Button(int port) : port(port) {
-    pinMode(port, INPUT);
-}
+Button::Button(int port) : port(port) { pinMode(port, INPUT); }
 
-bool Button::isPressed() {
-    return digitalRead(port) == LOW;
-}
+bool Button::isPressed() { return digitalRead(port) == LOW; }

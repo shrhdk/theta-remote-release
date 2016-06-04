@@ -7,10 +7,11 @@
 
 class Button {
 public:
-    Button(int port);
-    bool isPressed();
+  Button(int port);
+  bool isPressed();
+
 private:
-    const int port;
+  const int port;
 };
 
 #endif

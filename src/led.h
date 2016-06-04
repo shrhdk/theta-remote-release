@@ -9,15 +9,16 @@
 
 class LED {
 public:
-    LED(int port);
-    void on();
-    void off();
-    void toggle();
+  LED(int port);
+  void on();
+  void off();
+  void toggle();
+
 private:
-    const int port;
-    bool onOff;
-    bool get();
-    void set(bool onOff);
+  const int port;
+  bool onOff;
+  bool get();
+  void set(bool onOff);
 };
 
 #endif

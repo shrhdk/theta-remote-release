@@ -3,14 +3,14 @@
  */
 
 #include "theta_s.h"
-#include "osc_command.h"
 #include "logger.h"
-#include <strings.h>
-#include <ESP8266WiFi.h>
+#include "osc_command.h"
 #include <ESP8266HTTPClient.h>
+#include <ESP8266WiFi.h>
+#include <Ticker.h>
 #include <arduino.h>
 #include <stdint.h>
-#include <Ticker.h>
+#include <strings.h>
 
 // file scope
 
@@ -20,126 +20,120 @@ const int UPDATE_SESSION_PERIOD = 160;
 
 bool needToUpdateSession = false;
 
-void updateSessionFlag() {
-    needToUpdateSession = true;
-}
+void updateSessionFlag() { needToUpdateSession = true; }
 
 void enableUpdateSessionEvent() {
-    needToUpdateSession = false;
-    ticker.attach(UPDATE_SESSION_PERIOD, updateSessionFlag);
+  needToUpdateSession = false;
+  ticker.attach(UPDATE_SESSION_PERIOD, updateSessionFlag);
 }
 
-void disableUpdateSessionEvent() {
-    ticker.detach();
-}
+void disableUpdateSessionEvent() { ticker.detach(); }
 
 // public
 
 void ThetaSClass::connect(const char *ssid, const char *password) {
-    WiFi.begin(ssid, password);
+  WiFi.begin(ssid, password);
 }
 
-wl_status_t ThetaSClass::status() {
-    return WiFi.status();
-}
+wl_status_t ThetaSClass::status() { return WiFi.status(); }
 
 int ThetaSClass::startSession() {
-    Logger.debug("ThetaS::startSession");
+  Logger.debug("ThetaS::startSession");
 
-    disableUpdateSessionEvent();
+  disableUpdateSessionEvent();
 
-    OSCCommand cmd("camera.startSession");
+  OSCCommand cmd("camera.startSession");
 
-    cmd.execute();
+  cmd.execute();
 
-    if(cmd.statusCode != 200) {
-        return 1;
-    }
+  if (cmd.statusCode != 200) {
+    return 1;
+  }
 
-    strcpy(sessionID, cmd.getResultString("sessionId"));
+  strcpy(sessionID, cmd.getResultString("sessionId"));
 
-    enableUpdateSessionEvent();
+  enableUpdateSessionEvent();
 
-    return 0;
+  return 0;
 }
 
 int ThetaSClass::updateSession() {
-    Logger.debug("ThetaS::updateSession");
+  Logger.debug("ThetaS::updateSession");
 
-    disableUpdateSessionEvent();
+  disableUpdateSessionEvent();
 
-    // Construct Request
-    OSCCommand cmd("camera.updateSession");
-    cmd.addParameter("sessionId", sessionID);
+  // Construct Request
+  OSCCommand cmd("camera.updateSession");
+  cmd.addParameter("sessionId", sessionID);
 
-    cmd.execute();
+  cmd.execute();
 
-    if(cmd.statusCode != 200) {
-        return 1;
-    }
+  if (cmd.statusCode != 200) {
+    return 1;
+  }
 
-    strcpy(sessionID, cmd.getResultString("sessionId"));
+  strcpy(sessionID, cmd.getResultString("sessionId"));
 
-    enableUpdateSessionEvent();
+  enableUpdateSessionEvent();
 
-    return 0;
+  return 0;
 }
 
 int ThetaSClass::takePicture() {
-    return executeSimpleCommand("camera.takePicture");
+  return executeSimpleCommand("camera.takePicture");
 }
 
 int ThetaSClass::startCapture() {
-    return executeSimpleCommand("camera._startCapture");
+  return executeSimpleCommand("camera._startCapture");
 }
 
 int ThetaSClass::stopCapture() {
-    return executeSimpleCommand("camera._stopCapture");
+  return executeSimpleCommand("camera._stopCapture");
 }
 
 int ThetaSClass::shoot() {
-    int result = takePicture();
+  int result = takePicture();
 
-    if(result != 2) {
-        return result;
-    }
+  if (result != 2) {
+    return result;
+  }
 
-    result = startCapture();
+  result = startCapture();
 
-    if(result != 2) {
-        return result;
-    }
+  if (result != 2) {
+    return result;
+  }
 
-    return stopCapture();
+  return stopCapture();
 }
 
 int ThetaSClass::handle() {
-    if(needToUpdateSession) {
-        return ThetaS.updateSession();
-    }
+  if (needToUpdateSession) {
+    return ThetaS.updateSession();
+  }
 
-    return 0;
+  return 0;
 }
 
 // private
 
 int ThetaSClass::executeSimpleCommand(const char *name) {
-    Logger.debug(name);
+  Logger.debug(name);
 
-    OSCCommand cmd(name);
-    cmd.addParameter("sessionId", sessionID);
+  OSCCommand cmd(name);
+  cmd.addParameter("sessionId", sessionID);
 
-    cmd.execute();
+  cmd.execute();
 
-    if(strcmp(cmd.code, "disabledCommand") == 0) {
-        return 2;
-    }
+  if (strcmp(cmd.code, "disabledCommand") == 0) {
+    return 2;
+  }
 
-    if(cmd.statusCode != 200) {
-        return 1;
-    }
+  if (cmd.statusCode != 200) {
+    return 1;
+  }
 
-    return 0;
+  return 0;
 }
 
 ThetaSClass ThetaS;
