@@ -106,5 +106,3 @@ float OSCCommand::getResultFloat(const char *name) {
   aJsonObject *obj = getResultObject(name);
   return obj == NULL ? 0 : obj->valuefloat;
 }
-
-// private
