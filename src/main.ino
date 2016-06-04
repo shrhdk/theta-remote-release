@@ -3,7 +3,6 @@
  */
 
 #include "settings_server.h"
-#include "logger.h"
 #include "button.h"
 #include "led.h"
 #include "settings.h"
@@ -19,15 +18,15 @@ void connect(const char *ssid, const char *password) {
     while(ThetaS.status() != WL_CONNECTED) {
         delay(300);
         led.toggle();
-        Logger.debug(".");
+        Serial.print(".");
     }
 }
 
 // Entry Point
 
 void setup() {
-    Logger.begin(LogLevel::DEBUG, 115200);
-    Logger.debug("theta-remote-release");
+    Serial.begin(115200);
+    Serial.println("theta-remote-release");
 
     if(button.isPressed()) {
         led.on();

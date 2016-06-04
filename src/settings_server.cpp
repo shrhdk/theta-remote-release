@@ -3,9 +3,7 @@
  */
 
 #include "settings_server.h"
-#include "logger.h"
 #include "settings.h"
-
 #include <string.h>
 
 // public

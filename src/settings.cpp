@@ -3,7 +3,6 @@
  */
 
 #include "settings.h"
-#include "logger.h"
 #include <EEPROM.h>
 
 // public
@@ -13,11 +12,9 @@ void SettingsClass::load() {
 
   EEPROM.begin(128);
   if (verify() != 0) {
-    Logger.debug("No saved data.");
     strcpy(ssid, "");
     strcpy(password, "");
   } else {
-    Logger.debug("Loading saved data.");
     read(ssid);
     read(password);
   }

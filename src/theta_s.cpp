@@ -3,7 +3,6 @@
  */
 
 #include "theta_s.h"
-#include "logger.h"
 #include "osc_command.h"
 #include <ESP8266HTTPClient.h>
 #include <ESP8266WiFi.h>
@@ -38,7 +37,7 @@ void ThetaSClass::connect(const char *ssid, const char *password) {
 wl_status_t ThetaSClass::status() { return WiFi.status(); }
 
 int ThetaSClass::startSession() {
-  Logger.debug("ThetaS::startSession");
+  Serial.println("ThetaS::startSession");
 
   disableUpdateSessionEvent();
 
@@ -58,7 +57,7 @@ int ThetaSClass::startSession() {
 }
 
 int ThetaSClass::updateSession() {
-  Logger.debug("ThetaS::updateSession");
+  Serial.println("ThetaS::updateSession");
 
   disableUpdateSessionEvent();
 
@@ -118,7 +117,7 @@ int ThetaSClass::handle() {
 // private
 
 int ThetaSClass::executeSimpleCommand(const char *name) {
-  Logger.debug(name);
+  Serial.println(name);
 
   OSCCommand cmd(name);
   cmd.addParameter("sessionId", sessionID);
