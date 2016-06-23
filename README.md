@@ -34,7 +34,7 @@ theta-remote-release/
 
 ## ファームウェア
 
-このプロジェクトはArduino ([PlatformIO](http://http://platformio.org/))を利用しています。
+このプロジェクトはArduino ([PlatformIO](http://platformio.org/))を利用しています。
 
 次の手順でファームをビルドしてリモコンに書き込めます。
 
@@ -52,7 +52,7 @@ $ git clone https://github.com/shrhdk/theta-remote-release.git
 
 # ビルドしてリモコン(ESP8266)にアップロードする
 $ cd theta-remote-release
-$ platformio run --target upload
+$ pio run --target upload
 ```
 
 ## 組み立て例
