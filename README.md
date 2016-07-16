@@ -65,7 +65,6 @@ $ pio run --target upload
 ## License
 
 - This project is released under the MIT license. (except `ESP8266HTTPClient.cpp`)
-- [ESP8266HTTPClient.cpp](src/ESP8266HTTPClient.cpp) is released under the LGPL. (the original is [here](https://github.com/esp8266/Arduino/blob/2.2.0/libraries/ESP8266HTTPClient/src/ESP8266HTTPClient.cpp))
 
 ## 謝辞
 
