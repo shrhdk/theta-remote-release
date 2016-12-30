@@ -64,7 +64,7 @@ $ pio run --target upload
 
 ## License
 
-- This project is released under the MIT license. (except `ESP8266HTTPClient.cpp`)
+- This project is released under the MIT license.
 
 ## 謝辞
 
