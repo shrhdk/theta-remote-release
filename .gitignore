@@ -9,6 +9,7 @@
 
 ### PlatformIO ###
 .pioenvs/
+.piolibdeps/
 
 ### GCC ###
 *.gch
