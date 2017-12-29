@@ -71,4 +71,4 @@ $ pio run --target upload
 このプロジェクトは以下のソフトウェア・資料を利用しています。
 
 - [aJson](https://github.com/interactive-matter/aJson) Copyright (c) 2010, Interactive Matter, Marcus Nowotny
-- [ゆるりとものづくり: ここであえてのESP-WROOM-02用変換基板](http://monomake.blogspot.jp/2015/08/esp-wroom-02.html)
+- [ここであえてのESP-WROOM-02用変換基板 - ゆるりとものづくり](http://monomake.hatenablog.com/entry/2015/08/12/esp-wroom-02/)
