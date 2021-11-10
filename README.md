@@ -25,7 +25,7 @@ theta-remote-release/
 
 ## ハードウェア
 
-回路図、プリント基板は[KiCad](http://kicad-pcb.org/)で設計しました。
+回路図、プリント基板は[KiCad](http://kicad.org/)で設計しました。
 
 `hardware/theta-remote-release.pro`をKiCadで開いてください。
 
